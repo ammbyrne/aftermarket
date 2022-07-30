@@ -1,5 +1,6 @@
 *.jpg
 *.cfg
+*.png
 /bin
 /build
 /stockdif
@@ -7,4 +8,4 @@
 /include
 /lib
 .env
-.spec
+*.spec
