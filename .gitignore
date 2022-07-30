@@ -1,0 +1,10 @@
+*.jpg
+*.cfg
+/bin
+/build
+/stockdif
+/dist
+/include
+/lib
+.env
+.spec
