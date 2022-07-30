@@ -1,11 +1,10 @@
-.jpg
 .cfg
-.png
 /bin
 /build
 /stockdif
 /dist
 /include
+/images
 /lib
 .env
 .spec

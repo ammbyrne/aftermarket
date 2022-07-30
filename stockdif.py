@@ -100,8 +100,8 @@ email_string = email_message.as_string()
 if os.path.exists("*.png"):
   os.remove("*.png")
 
-driver.get_screenshot_as_file(date_str + "_screenshot.png")
-str = date_str + "_screenshot.png"
+driver.get_screenshot_as_file("./images/" + date_str + "_screenshot.png")
+str = "./images/" + date_str + "_screenshot.png"
 #driver.implicitly_wait(2000)
 
 # Attach more (documents)
@@ -116,6 +116,5 @@ context = ssl.create_default_context()
 with smtplib.SMTP_SSL("smtp.mail.yahoo.com", 465, context=context) as server:
     server.login(email_from, passcode)
     server.sendmail(email_from, email_to, email_string)
-
 
 driver.quit()
