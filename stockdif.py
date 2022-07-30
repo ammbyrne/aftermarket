@@ -97,15 +97,14 @@ email_message.attach(MIMEText(html, "html"))
 # Convert it as a string
 email_string = email_message.as_string()
 
-if os.path.exists("*.png"):
-  os.remove("*.png")
+if os.path.exists("./images/*.png"):
+  os.remove("./images/*.png")
 
 driver.get_screenshot_as_file("./images/" + date_str + "_screenshot.png")
 str = "./images/" + date_str + "_screenshot.png"
 #driver.implicitly_wait(2000)
 
 # Attach more (documents)
-##############################################################
 attach_file_to_email(email_message, str, {'Content-ID': '<myimageid>'})
 
 # Convert it as a string
