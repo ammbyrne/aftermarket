@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import os
 import smtplib, ssl
 ## email.mime subclasses
@@ -46,13 +46,16 @@ def runDif():
     driver.get("https://bullsheet.me/auth/login")
     #driver.fullscreen_window()
 
-    load_dotenv()
+    #load_dotenv()
 
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[3]/div[1]/div[2]/form/div/div[2]/div/input')
-    search.send_keys(os.environ.get("bulluser"))
+    #search.send_keys(os.environ.get("bulluser"))
+    search.send_keys("bulluser")
 
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[3]/div[1]/div[2]/form/div/div[3]/div/input')
-    search.send_keys(os.environ.get("bullpwd"))
+    #search.send_keys(os.environ.get("bullpwd"))
+    search.send_keys("bullpwd")
+
 
     # click login button
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[3]/div[1]/div[2]/form/div/div[4]/button/span')
@@ -62,7 +65,8 @@ def runDif():
 
     # enter etoro id
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[2]/div/div/div/div[2]/div/div/div/input')
-    search.send_keys(os.environ.get("etoro_id"))
+    #search.send_keys(os.environ.get("etoro_id"))
+    search.send_keys("etoro_id")
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[2]/div/div/div/div[2]/button')
     search.click()
 
@@ -84,17 +88,17 @@ def runDif():
         </html>
         '''
 
-    email_from = os.environ.get("yahoo_email")
-    passcode = os.environ.get("yahoo_passcode")
-    email_to = os.environ.get("yahoo_email")
+    #email_from = os.environ.get("yahoo_email")
+    #passcode = os.environ.get("yahoo_passcode")
+    #email_to = os.environ.get("yahoo_email")
 
     # Generate today's date to be included in the email Subject
     date_str = pd.Timestamp.today().strftime('%Y-%m-%d')
 
     # Create a MIMEMultipart class, and set up the From, To, Subject fields
     email_message = MIMEMultipart()
-    email_message['From'] = email_from
-    email_message['To'] = email_to
+    email_message['From'] = yahoo_email
+    email_message['To'] = yahoo_email
     email_message['Subject'] = f'Report email - {date_str}'
 
     # Attach the html doc defined earlier, as a MIMEText html content type to the MIME message
@@ -117,8 +121,8 @@ def runDif():
     # Connect to the Gmail SMTP server and Send Email
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL("smtp.mail.yahoo.com", 465, context=context) as server:
-        server.login(email_from, passcode)
-        server.sendmail(email_from, email_to, email_string)
+        server.login(yahoo_email, yahoo_passcode)
+        server.sendmail(yahoo_email, yahoo_email, email_string)
 
     driver.quit()
 
