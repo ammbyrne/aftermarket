@@ -41,7 +41,8 @@ def runDif():
     #chrome_options.add_argument("--no-sandbox")
     #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
     ser = Service(os.environ.get("CHROMEDRIVER_PATH"))
-    driver = webdriver.Chrome(service=ser, options=chrome_options)
+   # driver = webdriver.Chrome(service=ser, options=chrome_options)
+    driver = webdriver.Chrome(service=ser)
 
     driver.get("https://bullsheet.me/auth/login")
     #driver.fullscreen_window()
