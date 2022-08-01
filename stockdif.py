@@ -35,12 +35,12 @@ def attach_file_to_email(email_message, filename, extra_headers=None):
 def runDif():
 
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.binary_location = "GOOGLE_CHROME_BIN"
     #chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
+    #chrome_options.add_argument("--disable-dev-shm-usage")
+    #chrome_options.add_argument("--no-sandbox")
     #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
-    ser = Service(os.environ.get("CHROMEDRIVER_PATH"))
+    ser = Service("CHROMEDRIVER_PATH")
     driver = webdriver.Chrome(service=ser, options=chrome_options)
 
     driver.get("https://bullsheet.me/auth/login")
