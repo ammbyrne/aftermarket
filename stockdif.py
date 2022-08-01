@@ -40,12 +40,11 @@ def runDif():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
     #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
-    ser = os.environ.get("CHROMEDRIVER_PATH")
+    ser = Service(os.environ.get("CHROMEDRIVER_PATH"))
     driver = webdriver.Chrome(service=ser, options=chrome_options)
 
-
     driver.get("https://bullsheet.me/auth/login")
-    driver.fullscreen_window()
+    #driver.fullscreen_window()
 
     load_dotenv()
 
@@ -104,14 +103,13 @@ def runDif():
     email_string = email_message.as_string()
 
     if os.path.exists("./images/*.png"):
-        os.remove("./images/*.png")
+        os.remove("./images/*.*")
 
     driver.get_screenshot_as_file("./images/" + date_str + "_screenshot.png")
-    str = "./images/" + date_str + "_screenshot.png"
     #driver.implicitly_wait(2000)
 
     # Attach more (documents)
-    attach_file_to_email(email_message, str, {'Content-ID': '<myimageid>'})
+    attach_file_to_email(email_message, "./images/" + date_str + "_screenshot.png", {'Content-ID': '<myimageid>'})
 
     # Convert it as a string
     email_string = email_message.as_string()
