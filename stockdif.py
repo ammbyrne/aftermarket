@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from dotenv import load_dotenv
 import os
 import smtplib, ssl
@@ -38,7 +39,10 @@ def runDif():
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+    #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+    ser = os.environ.get("CHROMEDRIVER_PATH")
+    driver = webdriver.Chrome(service=ser, options=chrome_options)
+
 
     driver.get("https://bullsheet.me/auth/login")
     driver.fullscreen_window()
