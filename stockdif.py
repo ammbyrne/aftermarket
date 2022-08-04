@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
 import smtplib, ssl
 ## email.mime subclasses
@@ -35,28 +34,21 @@ def attach_file_to_email(email_message, filename, extra_headers=None):
 def runDif():
 
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
-    ser = Service("/app/.chromedriver/bin/chromedriver")
-   # driver = webdriver.Chrome(service=ser, options=chrome_options)
-    driver = webdriver.Chrome(service=ser, options=chrome_options)
+    #chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-gpu")
 
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get("https://bullsheet.me/auth/login")
-    #driver.fullscreen_window()
+    driver.fullscreen_window()
 
-    #load_dotenv()
+    load_dotenv()
 
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[3]/div[1]/div[2]/form/div/div[2]/div/input')
-    #search.send_keys(os.environ.get("bulluser"))
-    search.send_keys("bulluser")
+    search.send_keys(os.environ.get("bulluser"))
 
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[3]/div[1]/div[2]/form/div/div[3]/div/input')
-    #search.send_keys(os.environ.get("bullpwd"))
-    search.send_keys("bullpwd")
-
+    search.send_keys(os.environ.get("bullpwd"))
 
     # click login button
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[3]/div[1]/div[2]/form/div/div[4]/button/span')
@@ -66,8 +58,7 @@ def runDif():
 
     # enter etoro id
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[2]/div/div/div/div[2]/div/div/div/input')
-    #search.send_keys(os.environ.get("etoro_id"))
-    search.send_keys("etoro_id")
+    search.send_keys(os.environ.get("etoro_id"))
     search = driver.find_element("xpath", '//*[@id="root"]/div/div/div[2]/div/div/div/div[2]/button')
     search.click()
 
@@ -89,17 +80,17 @@ def runDif():
         </html>
         '''
 
-    #email_from = os.environ.get("yahoo_email")
-    #passcode = os.environ.get("yahoo_passcode")
-    #email_to = os.environ.get("yahoo_email")
+    email_from = os.environ.get("yahoo_email")
+    passcode = os.environ.get("yahoo_passcode")
+    email_to = os.environ.get("yahoo_email")
 
     # Generate today's date to be included in the email Subject
     date_str = pd.Timestamp.today().strftime('%Y-%m-%d')
 
     # Create a MIMEMultipart class, and set up the From, To, Subject fields
     email_message = MIMEMultipart()
-    email_message['From'] = yahoo_email
-    email_message['To'] = yahoo_email
+    email_message['From'] = email_from
+    email_message['To'] = email_to
     email_message['Subject'] = f'Report email - {date_str}'
 
     # Attach the html doc defined earlier, as a MIMEText html content type to the MIME message
@@ -107,14 +98,15 @@ def runDif():
     # Convert it as a string
     email_string = email_message.as_string()
 
-    if os.path.exists("./images/*.png"):
-        os.remove("./images/*.*")
+    if os.path.exists("images/*.png"):
+        os.remove("images/*")
 
     driver.get_screenshot_as_file("./images/" + date_str + "_screenshot.png")
+    str = "./images/" + date_str + "_screenshot.png"
     #driver.implicitly_wait(2000)
 
     # Attach more (documents)
-    attach_file_to_email(email_message, "./images/" + date_str + "_screenshot.png", {'Content-ID': '<myimageid>'})
+    attach_file_to_email(email_message, str, {'Content-ID': '<myimageid>'})
 
     # Convert it as a string
     email_string = email_message.as_string()
@@ -122,11 +114,10 @@ def runDif():
     # Connect to the Gmail SMTP server and Send Email
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL("smtp.mail.yahoo.com", 465, context=context) as server:
-        server.login(yahoo_email, yahoo_passcode)
-        server.sendmail(yahoo_email, yahoo_email, email_string)
+        server.login(email_from, passcode)
+        server.sendmail(email_from, email_to, email_string)
 
     driver.quit()
 
 if __name__ == "__main__":
     runDif()
-
